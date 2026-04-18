@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* StockNova Design System — Finanzauto brand, rich & polished */
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 220 30% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 12%;
+
+    /* Finanzauto #003876 */
+    --primary: 210 100% 23%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 210 100% 30%;
+
+    --secondary: 220 25% 93%;
+    --secondary-foreground: 220 30% 12%;
+
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 10% 48%;
+
+    --accent: 30 93% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 152 69% 38%;
+    --success-foreground: 0 0% 100%;
+    --success-soft: 148 60% 93%;
+    --success-soft-foreground: 152 60% 28%;
+
+    /* Finanzauto #F7941D */
+    --warning: 30 93% 54%;
+    --warning-foreground: 0 0% 100%;
+    --warning-soft: 36 100% 93%;
+    --warning-soft-foreground: 25 80% 28%;
+
+    /* Finanzauto #E63027 */
+    --destructive: 3 79% 54%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-soft: 3 80% 95%;
+    --destructive-soft-foreground: 3 65% 38%;
+
+    --info: 210 90% 56%;
+    --info-foreground: 0 0% 100%;
+    --info-soft: 210 90% 94%;
+    --info-soft-foreground: 210 70% 35%;
+
+    --role-admin: 265 80% 55%;
+    --role-admin-foreground: 0 0% 100%;
+    --role-manager: 210 85% 50%;
+    --role-manager-foreground: 0 0% 100%;
+    --role-viewer: 220 12% 52%;
+    --role-viewer-foreground: 0 0% 100%;
+
+    --border: 220 18% 88%;
+    --input: 220 18% 88%;
+    --ring: 210 100% 23%;
+
+    --radius: 0.75rem;
+
+    /* Dark branded sidebar */
+    --sidebar-background: 215 50% 16%;
+    --sidebar-foreground: 210 30% 92%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 215 50% 16%;
+    --sidebar-accent: 215 45% 22%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 215 40% 22%;
+    --sidebar-ring: 0 0% 100%;
+    --sidebar-muted: 215 30% 40%;
+
+    --shadow-sm: 0 1px 3px 0 hsl(220 30% 12% / 0.06), 0 1px 2px -1px hsl(220 30% 12% / 0.06);
+    --shadow-md: 0 4px 16px -3px hsl(220 30% 12% / 0.10), 0 2px 6px -2px hsl(220 30% 12% / 0.06);
+    --shadow-lg: 0 16px 40px -10px hsl(220 30% 12% / 0.14), 0 4px 12px -4px hsl(220 30% 12% / 0.06);
+  }
+
+  .dark {
+    --background: 220 25% 7%;
+    --foreground: 210 20% 96%;
+    --card: 220 24% 10%;
+    --card-foreground: 210 20% 96%;
+    --popover: 220 24% 10%;
+    --popover-foreground: 210 20% 96%;
+    --primary: 210 20% 96%;
+    --primary-foreground: 210 100% 11%;
+    --secondary: 220 18% 16%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 220 18% 16%;
+    --muted-foreground: 220 12% 60%;
+    --accent: 30 93% 54%;
+    --accent-foreground: 0 0% 100%;
+    --border: 220 18% 18%;
+    --input: 220 18% 18%;
+    --ring: 210 20% 96%;
+    --sidebar-background: 215 50% 10%;
+    --sidebar-foreground: 210 20% 92%;
+    --sidebar-accent: 215 45% 16%;
+    --sidebar-accent-foreground: 210 20% 96%;
+    --sidebar-border: 215 40% 16%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body, #root {
+    @apply h-full;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1, h2, h3, h4 {
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--shadow-sm);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-md);
+  }
+  .shadow-heavy {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@layer components {
+  /* Gradient primary button override */
+  .btn-gradient {
+    @apply relative overflow-hidden text-white font-semibold;
+    background: linear-gradient(135deg, hsl(210 100% 23%), hsl(210 100% 32%));
+    transition: all 0.2s ease;
+  }
+  .btn-gradient:hover {
+    background: linear-gradient(135deg, hsl(210 100% 28%), hsl(210 100% 36%));
+    box-shadow: 0 4px 14px -3px hsl(210 100% 23% / 0.45);
+  }
+  .btn-gradient:active {
+    transform: translateY(1px);
+  }
+  .btn-gradient:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
