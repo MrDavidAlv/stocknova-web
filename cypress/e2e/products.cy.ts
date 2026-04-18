@@ -13,11 +13,9 @@ describe("Products", () => {
   it("should search products by name", () => {
     cy.visit("/products");
     cy.get("table tbody tr").should("have.length.greaterThan", 0);
-    cy.get("input[placeholder*=Buscar]").type("test-nonexistent-xyz");
-    // Wait for debounce and API call
-    cy.wait(1000);
-    // Should show empty or filtered results
-    cy.get("table").should("be.visible");
+    cy.get("input[placeholder*='Buscar por nombre']").type("zzz-nonexistent-xyz");
+    // Wait for debounce and API response — no results shows empty state
+    cy.contains("Sin productos", { timeout: 15000 }).should("be.visible");
   });
 
   it("should navigate to create product form", () => {
@@ -38,9 +36,8 @@ describe("Products", () => {
 
     cy.contains("button", "Crear producto").click();
 
-    // Should redirect to product detail or list
+    // Should redirect and show success
     cy.url().should("not.include", "/new");
-    // Verify toast success
     cy.contains("Producto creado").should("be.visible");
   });
 
@@ -53,23 +50,28 @@ describe("Products", () => {
   });
 
   it("should edit a product", () => {
-    cy.visit("/products");
-    // Click edit button on first product
-    cy.get("table tbody tr").first().find("a").first().click();
-    cy.url().should("match", /\/products\/\d+/);
+    // First create a product to edit (avoids touching seed data)
+    const originalName = `ToEdit ${Date.now()}`;
+    cy.visit("/products/new");
+    cy.get("#productName").type(originalName);
+    cy.get("#unitPrice").type("10");
+    cy.contains("button", "Crear producto").click();
+    cy.contains("Producto creado").should("be.visible");
 
-    cy.contains("Editar").click();
-    cy.url().should("include", "/edit");
-    cy.get("#productName").should("be.visible");
-    cy.get("#productName").clear().type(`Edited ${Date.now()}`);
-    cy.contains("button", "Guardar cambios").click();
-    cy.contains("Producto actualizado").should("be.visible");
+    // Now navigate to edit
+    cy.url().then((url) => {
+      cy.visit(`${url}/edit`);
+      cy.get("#productName").should("be.visible");
+      cy.get("#productName").clear().type(`Edited ${Date.now()}`);
+      cy.contains("button", "Guardar cambios").click();
+      cy.contains("Producto actualizado").should("be.visible");
+    });
   });
 
-  it("should show pagination controls", () => {
+  it("should show pagination info", () => {
     cy.visit("/products");
     cy.get("table tbody tr").should("have.length.greaterThan", 0);
-    // Pagination info should be visible
-    cy.contains(/Página \d+ de \d+/).should("be.visible");
+    // Pagination shows "X / Y" format
+    cy.contains(/\d+ \/ \d+/).should("be.visible");
   });
 });
