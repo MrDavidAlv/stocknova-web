@@ -21,4 +21,11 @@ export default defineConfig({
       VIEWER_PASSWORD: process.env.CYPRESS_VIEWER_PASSWORD,
     },
   },
+
+  component: {
+    devServer: {
+      framework: "react",
+      bundler: "vite",
+    },
+  },
 });
