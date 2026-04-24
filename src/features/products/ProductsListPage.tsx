@@ -59,7 +59,7 @@ interface Filters {
   sortOrder: "asc" | "desc";
   page: number;
   pageSize: number;
-  id: number;
+  ProductId: number;
 }
 
 const DEFAULT_FILTERS: Filters = {
@@ -72,7 +72,7 @@ const DEFAULT_FILTERS: Filters = {
   sortOrder: "asc",
   page: 1,
   pageSize: 10,
-  id: 0
+  ProductId: 0
 };
 
 function stockTone(p: ProductResponse): "destructive" | "warning" | "success" | "neutral" {
@@ -104,7 +104,7 @@ export default function ProductsListPage() {
 
   useEffect(() => {
     setFilters((f) => ({ ...f, search: debouncedSearch, page: 1 }));
-    setFilters((f) => ({ ...f, id: Number(debouncedSearchid) || 0, page: 1 }));
+    setFilters((f) => ({ ...f, ProductId: Number(debouncedSearchid) || 0, page: 1 }));
 
   }, [debouncedSearch, debouncedSearchid]);
 
@@ -116,7 +116,7 @@ export default function ProductsListPage() {
       sortBy: filters.sortBy,
       sortOrder: filters.sortOrder,
     };
-    if (filters.id) params.id = Number(filters.id); 
+    if (filters.ProductId) params.ProductId = Number(filters.ProductId); 
     if (filters.search) params.search = filters.search;
     if (filters.categoryId !== "all") params.categoryId = Number(filters.categoryId);
     if (filters.minPrice) params.minPrice = Number(filters.minPrice);
