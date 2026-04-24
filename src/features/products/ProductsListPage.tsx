@@ -59,10 +59,11 @@ interface Filters {
   sortOrder: "asc" | "desc";
   page: number;
   pageSize: number;
+  id: number;
 }
 
 const DEFAULT_FILTERS: Filters = {
-  search: "",
+  search: "", 
   categoryId: "all",
   minPrice: "",
   maxPrice: "",
@@ -71,6 +72,7 @@ const DEFAULT_FILTERS: Filters = {
   sortOrder: "asc",
   page: 1,
   pageSize: 10,
+  id: 0
 };
 
 function stockTone(p: ProductResponse): "destructive" | "warning" | "success" | "neutral" {
@@ -89,7 +91,9 @@ export default function ProductsListPage() {
 
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [searchInput, setSearchInput] = useState("");
+  const [searchInputId, setSearchInputId] = useState("");
   const debouncedSearch = useDebounce(searchInput, 350);
+  const debouncedSearchid = useDebounce(searchInputId, 350);
 
   const [deleteTarget, setDeleteTarget] = useState<ProductResponse | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -100,7 +104,10 @@ export default function ProductsListPage() {
 
   useEffect(() => {
     setFilters((f) => ({ ...f, search: debouncedSearch, page: 1 }));
-  }, [debouncedSearch]);
+    setFilters((f) => ({ ...f, id: Number(debouncedSearchid) || 0, page: 1 }));
+
+  }, [debouncedSearch, debouncedSearchid]);
+
 
   const queryParams = useMemo<ProductFilterParams>(() => {
     const params: ProductFilterParams = {
@@ -109,6 +116,7 @@ export default function ProductsListPage() {
       sortBy: filters.sortBy,
       sortOrder: filters.sortOrder,
     };
+    if (filters.id) params.id = Number(filters.id); 
     if (filters.search) params.search = filters.search;
     if (filters.categoryId !== "all") params.categoryId = Number(filters.categoryId);
     if (filters.minPrice) params.minPrice = Number(filters.minPrice);
@@ -116,6 +124,8 @@ export default function ProductsListPage() {
     if (filters.discontinued !== "all") params.discontinued = filters.discontinued === "true";
     return params;
   }, [filters]);
+
+
 
   const productsQuery = useQuery({
     queryKey: ["products", queryParams],
@@ -284,12 +294,21 @@ export default function ProductsListPage() {
       <div className="overflow-hidden rounded-xl border bg-card shadow-elevated">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-3 border-b bg-muted/30 px-4 py-3">
+
+        <SearchInput
+            value={searchInputId}
+            onChange={setSearchInputId}
+            placeholder="Id Producto"
+            className="min-w-0 flex-1 sm:max-w-xs"
+          />
+          
           <SearchInput
             value={searchInput}
             onChange={setSearchInput}
             placeholder="Buscar por nombre..."
             className="min-w-0 flex-1 sm:max-w-xs"
           />
+           
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="gap-2 shadow-sm">
@@ -331,6 +350,7 @@ export default function ProductsListPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <th className="px-4 py-3.5">Id</th>
                   <th className="px-4 py-3.5">
                     <button onClick={() => toggleSort("ProductName")} className="font-semibold uppercase hover:text-foreground">
                       Producto {sortIcon("ProductName")}
@@ -359,6 +379,7 @@ export default function ProductsListPage() {
                       key={p.productId}
                       className="group transition-colors hover:bg-primary/[0.03]"
                     >
+                      <td className="px-4 py-3.5 text-muted-foreground">{p.productId}</td>
                       <td className="px-4 py-3.5">
                         <Link to={`/products/${p.productId}`} className="font-medium text-foreground hover:text-primary hover:underline">
                           {p.productName}

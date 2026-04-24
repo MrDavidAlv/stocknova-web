@@ -80,6 +80,7 @@ export interface ProductFilterParams {
   discontinued?: boolean;
   sortBy?: "ProductName" | "UnitPrice" | "UnitsInStock" | "CreatedAt";
   sortOrder?: "asc" | "desc";
+  id?: number;
 }
 
 export interface CreateProductRequest {
